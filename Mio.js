@@ -74,6 +74,9 @@ var Mio = (function () {
         footer: function(content, attr = {}){
         	return buildTag("footer", content, attr);
         },
+        button: function(content, attr = {}){
+            return buildTag("button", content, attr);
+        },
         table: function(content, attr = {}){
         	return buildTag("table", content, attr);
         },
@@ -95,6 +98,14 @@ var Mio = (function () {
         },
         img: function(src, alt, attr = {}){
         	return '<img src=\"' + src + '\" alt=\"' + alt + '\"' + parseAttr(attr) + '/>';
+        },
+        toElement: function(htmlString){
+            var element = document.createElement("div");
+            element.innerHTML = htmlString;
+            if(element.childNodes.length == 1){
+                element = element.firstChild;
+            }
+            return element;
         }
     }
 })();
