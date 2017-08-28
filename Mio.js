@@ -2,18 +2,19 @@
 
 var Mio = (function () {
     
-	function parseAttr(attr){
-		var currentString = ""
-		for(key in attr){
-			var keyStr = String(key).replace(/_/g, "-");
-			currentString += keyStr + '=\"' + String(attr[key]) + '\"';
+	function toHTMLAttributes(attributes){
+		var currentString = "";
+		for(key in attributes){
+			var keyString = String(key).replace(/_/g, "-");
+			currentString += keyString + '=\"' + String(attributes[key]) + '\"';
 		}
 		return currentString;
 	}
 
-	function buildTag(tag, content, attr){
-		var attrStr = parseAttr(attr);
-		return ('<' + tag + ((attrStr.length)? ' ' : '') + attrStr + '>' + content + '</' + tag + '>');
+	function buildTag(tag, content, attributes){
+		var attrString = toHTMLAttributes(attributes);
+		var formattedAttributes = (attrString.length) ? " " + attrString : attrString;
+		return ('<' + tag + formattedAttributes + '>' + content + '</' + tag + '>');
 	}
  
     return {
@@ -90,7 +91,9 @@ var Mio = (function () {
         	return buildTag("th", content, attr);
         },
         a: function(link, content, attr = {}){
-        	attr.href = link;
+        	if(!attr.href){
+        		attr.href = link;
+        	}
         	return buildTag("a", content, attr);
         },
         br: function(){
@@ -103,7 +106,7 @@ var Mio = (function () {
             var element = document.createElement("div");
             element.innerHTML = htmlString;
             if(element.childNodes.length == 1){
-                element = element.firstChild;
+                element = element.firstChild
             }
             return element;
         }
